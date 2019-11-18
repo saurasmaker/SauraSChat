@@ -15,7 +15,7 @@ public class User {
 		groups = new ArrayList<String>();
 	}
 
-	public User(String ID, String userName, String email, ArrayList<String> groups) {
+	public User(String userName, String email, ArrayList<String> groups) {
 		this.ID =ID;
 		this.email = email;
 		this.userName = userName;

@@ -73,7 +73,10 @@ public class Thread_client_commands extends Thread{
 				e.printStackTrace();
 			}
 			message = readMessage();
+			if(message != null)
 			checkCommands(message.split(" "));
+			else
+			JOptionPane.showMessageDialog(null, "Error al recibir mensaje del servidor.");
 		}
 		
 	}
@@ -117,13 +120,17 @@ public class Thread_client_commands extends Thread{
 		//Checking compatibility
 		String[] splitedIp = ip.split("\\.");
 		
-		if(splitedIp.length != 4) {
+		if(ip.equals("localhost"))
+			System.out.println("localhostmode");
+		
+		else if(splitedIp.length != 4) {
 			JOptionPane.showMessageDialog(null,"El texto introducido no corresponde a una IP válida.","Field error", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		
 		Integer i = 0;
 		
+		if(!ip.equals("localhost"))
 		for(String s: splitedIp) {
 			Integer checkSplitedIp = Integer.parseInt(s);
 			if(checkSplitedIp < 1 || checkSplitedIp > 254) {
@@ -150,6 +157,7 @@ public class Thread_client_commands extends Thread{
 			socket = new Socket(ip,port);
 			setBridge();
 			loadingFrame.dispose();
+			System.out.println("Conectado con el servidor");
 		} catch (UnknownHostException e) {
 			loadingFrame.dispose();
 			JOptionPane.showMessageDialog(null,e.getMessage() + "\n Try again.","Connection error", JOptionPane.ERROR_MESSAGE);
@@ -204,6 +212,7 @@ public class Thread_client_commands extends Thread{
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(null, "Se ha perdido la conexión con el servidor.\n" + e.getMessage(), /*Title*/"", JOptionPane.ERROR_MESSAGE);
 			setSuspended(true);
+			loginUser.dispose();
 			e.printStackTrace();
 		}
 			
@@ -231,13 +240,13 @@ public class Thread_client_commands extends Thread{
 	private void register(String[] splitedMessage) {
 		
 		try {
-			this.user = new User(splitedMessage[1], splitedMessage[2],splitedMessage[3], null);
+			this.user = new User(splitedMessage[1], splitedMessage[2], null);
 			JOptionPane.showMessageDialog(null, "You have registered succesfully.", /*Title*/"Sign in", JOptionPane.INFORMATION_MESSAGE);
 			this.loginUser.setVisible(true);
 			this.loginUser.getRegisterUser().dispose();
 		}
 		catch(Exception t) {
-			
+			JOptionPane.showMessageDialog(null, "Error recieving sign in confirmation from server", /*Title*/"Sign in", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 		return;

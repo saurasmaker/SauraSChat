@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -131,6 +132,8 @@ public class Thread_server_commands extends Thread{
 		BufferedReader objReader = null;
 		String user = null;
 		
+		checkFileUsers();
+		
 		try {
 			objReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\users\\users"));
 		} catch (FileNotFoundException e1) {
@@ -170,6 +173,8 @@ public class Thread_server_commands extends Thread{
 		
 		String buffer = null;
 		
+		checkFileUsers();
+		
 		//Registrar
 		try {
 			
@@ -195,6 +200,24 @@ public class Thread_server_commands extends Thread{
 			e.printStackTrace();
 		}
 		
+		
+		return;
+	}
+	
+	void checkFileUsers() {
+		
+		File file = new File(System.getProperty("user.dir") + "\\users\\");
+		
+		if(!file.exists())
+			file.mkdir(); 
+		
+		file = new File(System.getProperty("user.dir") + "\\users\\users");
+		if(!file.exists())
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
 		
 		return;
 	}

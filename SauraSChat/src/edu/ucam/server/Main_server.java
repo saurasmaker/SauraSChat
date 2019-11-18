@@ -29,11 +29,7 @@ public class Main_server {
 		File file = new File(System.getProperty("user.dir") + "\\users\\users");
 		
 		if(!file.exists())
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			file.mkdir();
 			
 		
 		return;
