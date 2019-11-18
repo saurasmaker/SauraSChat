@@ -131,9 +131,7 @@ public class Thread_server_commands extends Thread{
 		
 		BufferedReader objReader = null;
 		String user = null;
-		
-		checkFileUsers();
-		
+				
 		try {
 			objReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\users\\users"));
 		} catch (FileNotFoundException e1) {
@@ -142,14 +140,16 @@ public class Thread_server_commands extends Thread{
 		
 		try {
 			while((user = objReader.readLine()) != null) {
-				if(splitedMessage[2].equals(user))
-					try {
-						getOutput().writeUTF("LOGED");
-						return;
-					} catch (IOException e) {
-						e.printStackTrace();
-						break;
-					}	
+				if(splitedMessage[1].equals(user)) {
+					if(checkPass(splitedMessage[1]))
+						try {
+							getOutput().writeUTF("LOGED");
+							return;
+						} catch (IOException e) {
+							e.printStackTrace();
+							break;
+						}
+				}
 			}
 			
 		} catch (IOException e1) {
@@ -166,15 +166,33 @@ public class Thread_server_commands extends Thread{
 		return;
 	}
 	
+	Boolean checkPass(String user) {
+		
+		BufferedReader objReader = null;
+				
+		try {
+			objReader = new BufferedReader(new FileReader(System.getProperty("user.dir") + "\\users\\" + user));
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		}  
+		
+		try {
+			if((user = objReader.readLine()).split(" ")[2].equals(DigestUtils.md5Hex(splitedMessage[2])) )
+				return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 	void signinUser() {
 		
 		FileOutputStream fos = null;
 		DataOutputStream salida = null;
 		
 		String buffer = null;
-		
-		checkFileUsers();
-		
+				
 		//Registrar
 		if(checkAlreadySigned())
 		try {
@@ -200,24 +218,6 @@ public class Thread_server_commands extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return;
-	}
-	
-	void checkFileUsers() {
-		
-		File file = new File(System.getProperty("user.dir") + "\\users\\");
-		
-		if(!file.exists())
-			file.mkdir(); 
-		
-		file = new File(System.getProperty("user.dir") + "\\users\\users");
-		if(!file.exists())
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} 
 		
 		return;
 	}

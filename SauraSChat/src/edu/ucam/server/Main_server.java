@@ -24,13 +24,20 @@ public class Main_server {
 	}
 
 	//Methods
-	static void checkUsers(){
-	
-		File file = new File(System.getProperty("user.dir") + "\\users\\users");
+	static void checkUsers() {
+		
+		File file = new File(System.getProperty("user.dir") + "\\users");
 		
 		if(!file.exists())
-			file.mkdir();
-			
+			file.mkdir(); 
+		
+		file = new File(System.getProperty("user.dir") + "\\users\\users");
+		if(!file.exists())
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
 		
 		return;
 	}
