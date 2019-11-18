@@ -60,6 +60,8 @@ public class Thread_client_commands extends Thread{
 	public void run() {
 				
 		String message = null;
+		
+		//Thread control
 		while(true){
 			try {
 				synchronized(this){
@@ -72,11 +74,21 @@ public class Thread_client_commands extends Thread{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			message = readMessage();
+			
+			//Receive message
+			try {
+				message = readMessage();
+			}
+			catch(Exception e){
+				
+			}
 			if(message != null)
-			checkCommands(message.split(" "));
-			else
-			JOptionPane.showMessageDialog(null, "Error al recibir mensaje del servidor.");
+				checkCommands(message.split(" "));
+			else {
+				JOptionPane.showMessageDialog(null, "Error al recibir mensaje del servidor.");
+				setSuspended(true);
+			}
+			
 		}
 		
 	}

@@ -176,6 +176,7 @@ public class Thread_server_commands extends Thread{
 		checkFileUsers();
 		
 		//Registrar
+		if(checkAlreadySigned())
 		try {
 			
 			//Realizamos registro
@@ -190,7 +191,7 @@ public class Thread_server_commands extends Thread{
 			fos = new FileOutputStream(System.getProperty("user.dir") + "\\users\\users", true);
 			salida = new DataOutputStream(fos);
 			
-			salida.write((splitedMessage[2]+"\n").getBytes());
+			salida.write((splitedMessage[1]+"\n").getBytes());
 			
 			//Confirmamos registro
 			System.out.println("REGISTRO REALIZADO CON EXITO");
@@ -199,7 +200,6 @@ public class Thread_server_commands extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
 		
 		return;
 	}
@@ -231,21 +231,19 @@ public class Thread_server_commands extends Thread{
 	
 	Boolean checkAlreadySigned() {
 		
-		//Comprobamos si el usuario existe
-		try {
-			FileReader fr = new FileReader(System.getProperty("user.dir") + "\\users\\" + splitedMessage[1]);
-			
-		} catch (FileNotFoundException e1) {
+		File file = new File(System.getProperty("user.dir") + "\\users\\" + splitedMessage[1]);
+		
+		if(!file.exists())
+			return true;
+		else {
 			try {
 				getOutput().writeUTF("ALREADY_SIGNED_EMAIL " + splitedMessage[1]/*email*/ + " " + splitedMessage[2]/*userName*/);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			e1.printStackTrace();
 			return false;
 		}
 		
-		return true;
 	}
 	
 	String adjustID(Integer id) {
